@@ -46,10 +46,10 @@ while cap.isOpened():
     alpha = overlay_color[3] / 255.0
     blended = np.where(mask_3ch == 1, cv2.addWeighted(frame, 1 - alpha, overlay, alpha, 0), frame)
 
-    # display_im = cv2.resize(blended, (config["monitor_width"], config["monitor_height"]))
+    display_im = cv2.resize(blended, (config["monitor_width"], config["monitor_height"]))
 
     # Show the result
-    cv2.imshow('Person Segmentation', blended)
+    cv2.imshow('Person Segmentation', display_im)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break

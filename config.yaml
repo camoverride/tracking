@@ -1,6 +1,6 @@
 # Show monitor dimensions:  xrandr | grep '*' | awk '{print $1}'
 
-monitor_width: 600
-monitor_height: 300
+monitor_height: 1080
+monitor_width: 1920
 
 mask_color: green

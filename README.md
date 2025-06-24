@@ -14,6 +14,7 @@ Track stuff on a Raspberry Pi 4b!
 
 ## Run
 
+- `export DISPLAY=:0`
 - `python display.py`
 
 
