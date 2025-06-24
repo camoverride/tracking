@@ -6,7 +6,7 @@ from pycoral.utils.edgetpu import make_interpreter
 
 
 # Load model
-model_path = 'models/deeplabv3_mnv2_pascal_quant_edgetpu.tflite'
+model_path = 'models/deeplabv3_mnv2_dm05_pascal_quant_edgetpu.tflite'
 interpreter = make_interpreter(model_path)
 interpreter.allocate_tensors()
 
