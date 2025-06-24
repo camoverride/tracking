@@ -6,7 +6,7 @@ After=default.target
 Type=simple
 Restart=always
 WorkingDirectory=/home/pi/tracking
-ExecStart=/home/pi/tracking/.venv/bin/python /home/pi/tracking/run_display.py
+ExecStart=/home/pi/tracking/.venv/bin/python /home/pi/tracking/display.py
 StandardOutput=journal
 StandardError=journal
 Environment="PATH=/home/pi/tracking/.venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"

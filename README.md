@@ -5,6 +5,8 @@ Track stuff on a Raspberry Pi 4b!
 
 ## Install
 
+- `git clone git@github.com:camoverride/tracking.git`
+- `cd tracking`
 - `python -m venv .venv`
 - `source .venv/bin/activate`
 - `pip install -r requirements.txt`
