@@ -49,6 +49,9 @@ while cap.isOpened():
     display_im = cv2.resize(blended, (config["monitor_width"], config["monitor_height"]))
 
     # Show the result
+    cv2.namedWindow('Person Segmentation', cv2.WND_PROP_FULLSCREEN)
+    cv2.setWindowProperty('Person Segmentation', cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+
     cv2.imshow('Person Segmentation', display_im)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
