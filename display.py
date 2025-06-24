@@ -1,52 +1,55 @@
 import cv2
+import mediapipe as mp
 import numpy as np
-from pycoral.utils.edgetpu import make_interpreter
-from pycoral.adapters import common
+import yaml
 
-# Load model
-model_path = 'models/deeplabv3_mnv2_dm05_pascal_quant_edgetpu.tflite'
-interpreter = make_interpreter(model_path)
-interpreter.allocate_tensors()
+
+
+with open("config.yaml", "r") as f:
+    config = yaml.safe_load(f)
+
+
+# Initialize MediaPipe Selfie Segmentation
+mp_selfie_segmentation = mp.solutions.selfie_segmentation
+segment = mp_selfie_segmentation.SelfieSegmentation(model_selection=1)
 
 # Open webcam
 cap = cv2.VideoCapture(0)
 
-while True:
+# Define the overlay color (RGBA) - Green with alpha
+overlay_color = (0, 255, 0, 100)
+
+while cap.isOpened():
     ret, frame = cap.read()
     if not ret:
         break
 
-    # Resize frame to model input size
-    size = common.input_size(interpreter)
-    resized = cv2.resize(frame, size)
+    # Resize for faster processing (optional)
+    small_frame = cv2.resize(frame, (320, 240))
+    rgb = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
 
-    # Set input tensor and invoke interpreter
-    common.set_input(interpreter, resized)
-    interpreter.invoke()
+    # Get segmentation mask
+    results = segment.process(rgb)
+    mask = results.segmentation_mask
+    mask = cv2.resize(mask, (frame.shape[1], frame.shape[0]))
 
-    # Get raw output tensor
-    output_details = interpreter.get_output_details()[0]
-    output_data = interpreter.tensor(output_details['index'])()[0]
+    # Create binary mask (people = 1, background = 0)
+    condition = mask > 0.5
+    condition = condition.astype(np.uint8)
 
-    # output_data shape might be (257, 257, 1) or (1, 257, 257, 1)
-    # Convert to 2D if needed:
-    mask = output_data.squeeze()
-    # mask is an int array with class IDs per pixel, e.g. person = 15 in PASCAL VOC
+    # Create colored transparent overlay
+    overlay = np.zeros_like(frame, dtype=np.uint8)
+    overlay[:] = overlay_color[:3]
+    mask_3ch = cv2.merge([condition]*3)
 
-    # Create a boolean mask for person class (15)
-    person_mask = (mask == 15)
+    # Blend original with overlay using the alpha channel
+    alpha = overlay_color[3] / 255.0
+    blended = np.where(mask_3ch == 1, cv2.addWeighted(frame, 1 - alpha, overlay, alpha, 0), frame)
 
-    # Resize mask back to original frame size
-    person_mask_resized = cv2.resize(person_mask.astype(np.uint8), (frame.shape[1], frame.shape[0]), interpolation=cv2.INTER_NEAREST)
+    # display_im = cv2.resize(blended, (config["monitor_width"], config["monitor_height"]))
 
-    # Create green mask overlay
-    green_mask = np.zeros_like(frame)
-    green_mask[:, :, 1] = 255  # green channel
-
-    # Overlay the mask on original frame
-    output = cv2.addWeighted(frame, 1.0, green_mask, 0.5, 0, mask=person_mask_resized)
-
-    cv2.imshow('Person Segmentation', output)
+    # Show the result
+    cv2.imshow('Person Segmentation', blended)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break

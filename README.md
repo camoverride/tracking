@@ -1,58 +1,13 @@
 # Tracking
 
-Track stuff!
-
-
-## Requirements
-
-Hardware requirements:
-
-- Raspberry Pi 4b
-- Google Coral TPU
-- Webcam
-- Monitor
-- Power Supply
-
-System requirements:
-
-- Raspbian based off debian 10: Bookworm (legacy, 32-bit)
-- Python 3.9
+Track stuff on a Raspberry Pi 4b!
 
 
 ## Install
 
-- `python3.9 -m venv .venv`
+- `python -m venv .venv`
 - `source .venv/bin/activate`
-- `sudo apt-get install libopenblas-dev`
-- `echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | sudo tee /etc/apt/sources.list.d/coral-edgetpu.list`
-- `curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -`
-- `sudo apt-get update`
-- `sudo apt-get install libedgetpu1-std`
-- `sudo apt-get install python3-pycoral`
-
-- `sudo apt-get install libjpeg-dev zlib1g-dev`
-
-
-Test repo:
-
-- `mkdir coral && cd coral`
-- `git clone https://github.com/google-coral/pycoral.git`
-- `cd pycoral`
-- `bash examples/install_requirements.sh classify_image.py`
-- `pip install numpy pillow pycoral`
-- `sudo apt-get install python3-pandas`
-- `pip install pycoral --no-deps`
-
-```
-python3 examples/classify_image.py \
---model test_data/mobilenet_v2_1.0_224_inat_bird_quant_edgetpu.tflite \
---labels test_data/inat_bird_labels.txt \
---input test_data/parrot.jpg
-```
-
-Continue:
-
-- `wget https://github.com/google-coral/edgetpu/raw/master/test_data/deeplabv3_mnv2_pascal_quant_edgetpu.tflite -P models/`
+- `pip install -r requirements.txt`
 
 
 ## Run
@@ -85,4 +40,4 @@ Follow these steps in order:
 - Install tailscale for remote access and debugging.
 - Configure backup wifi networks.
 - Set up periodic reboots (cron job)
-- Set up Read-Only Filesysyem.
+- Set up Read-Only Filesystem.
