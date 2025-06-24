@@ -32,12 +32,16 @@ System requirements:
 
 - `sudo apt-get install libjpeg-dev zlib1g-dev`
 
+
 Test repo:
 
 - `mkdir coral && cd coral`
 - `git clone https://github.com/google-coral/pycoral.git`
 - `cd pycoral`
 - `bash examples/install_requirements.sh classify_image.py`
+- `pip install numpy pillow pycoral`
+- `sudo apt-get install python3-pandas`
+- `pip install pycoral --no-deps`
 
 ```
 python3 examples/classify_image.py \
@@ -46,7 +50,8 @@ python3 examples/classify_image.py \
 --input test_data/parrot.jpg
 ```
 
-- `pip install -r requirements.txt`
+Continue:
+
 - `wget https://github.com/google-coral/edgetpu/raw/master/test_data/deeplabv3_mnv2_pascal_quant_edgetpu.tflite -P models/`
 
 
